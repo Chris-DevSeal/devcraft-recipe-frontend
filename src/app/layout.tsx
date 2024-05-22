@@ -14,7 +14,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* TODO: Add session provider */}
         <App>{children}</App>
       </body>
     </html>
