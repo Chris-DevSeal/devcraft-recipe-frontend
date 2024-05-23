@@ -1,4 +1,5 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+//import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github";
 
 export const authOptions: NextAuthOptions = {
@@ -6,7 +7,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: (process.env.GITHUB_CLIENT_ID as string) || "test",
-      clientSecret: (process.env.GITHUB_SECRET_ID as string) || "test",
+      clientSecret: (process.env.GITHUB_CLIENT_SECRET as string) || "test",
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET as string, // refer to: https://medium.com/@rezahedi/using-nextauth-authentication-provider-in-next-js-by-app-router-f50cb23282c9
