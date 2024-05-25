@@ -4,8 +4,8 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <header className="flex gap-24">
-        <h1 className={`mb-3 text-2xl font-semibold`}>Recipe App!</h1>
+      <header className="flex gap-12 flex-col align-middle justify-center">
+        <h1 className="mb-3 text-2xl font-semibold text-center">Recipe App!</h1>
         <Login />
       </header>
       <Link
