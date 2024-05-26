@@ -9,6 +9,7 @@ export default function RecipeForm({ onSubmit }) {
     onSubmit({
       name: formData.get("name"),
       steps: formData.get("steps"),
+      // @ts-ignore
       ingredients: [...Array(ingredientAmount).keys()].map((index) => {
         return {
           name: formData.get(`name-${index}`),
@@ -22,37 +23,40 @@ export default function RecipeForm({ onSubmit }) {
   return (
     <form onSubmit={submitRecipe}>
       <div className="flex gap-4 justify-center items-center mb-6">
-        <label for="name">Name:</label>
+        <label htmlFor="name">Name:</label>
         <input id="name" name="name" placeholder="Banana Bread"></input>
       </div>
       <div className="flex gap-4 justify-center items-center mb-6">
-        <label for="steps">Steps:</label>
+        <label htmlFor="steps">Steps:</label>
         <textarea
           id="steps"
           name="steps"
           placeholder="1. Eat banana bread"
         ></textarea>
       </div>
-      {[...Array(ingredientAmount).keys()].map((index) => {
+
+      {
+        // @ts-ignore
+      [...Array(ingredientAmount).keys()].map((index) => {
         return (
           <fieldset
             className="flex gap-4 justify-center items-center mb-6"
             key={index}
           >
-            <label for={`name-${index}`}>Ingredient Name:</label>
+            <label htmlFor={`name-${index}`}>Ingredient Name:</label>
             <input
               id={`name-${index}`}
               name={`name-${index}`}
               placeholder="Bananas"
             ></input>
-            <label for={`amount-${index}`}>Ingredient Amount:</label>
+            <label htmlFor={`amount-${index}`}>Ingredient Amount:</label>
             <input
               id={`amount-${index}`}
               type="number"
               name={`amount-${index}`}
               placeholder="6"
             ></input>
-            <label for={`units-${index}`}>Ingredient Units:</label>
+            <label htmlFor={`units-${index}`}>Ingredient Units:</label>
             <input
               id={`units-${index}`}
               name={`units-${index}`}
