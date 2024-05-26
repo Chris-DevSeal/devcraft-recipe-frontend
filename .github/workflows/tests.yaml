@@ -8,14 +8,11 @@ name: Tests
 on:
     push:
         branches:
-        - workflow
+        - main
 
     pull_request:
         branches:
-        - workflow
-
-
-
+        - main
 jobs:
   test:
     name: Run tests
