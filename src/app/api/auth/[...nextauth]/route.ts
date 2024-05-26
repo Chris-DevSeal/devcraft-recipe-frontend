@@ -1,6 +1,8 @@
 //import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github";
+import { signIn } from "next-auth/react";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -11,8 +13,11 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET as string, // refer to: https://medium.com/@rezahedi/using-nextauth-authentication-provider-in-next-js-by-app-router-f50cb23282c9
+  pages: {
+    signIn: "/api/auth/custom-signin",
+    error: "/api/auth/custom-error"
+  },
 };
-
 
 const handler = NextAuth(authOptions);
 
