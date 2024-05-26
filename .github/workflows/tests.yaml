@@ -1,13 +1,13 @@
-# erforderliche Dependencies müssen installiert werden, damit die testumgebung  unserer entwicklungsumgebung entspricht
-# Jest nutzen um Unit-Tests durchzuführen
-# geeignete Befehle, um Tests auszuführen und Test-Coverage-Reports zu erstellen.
-# Konfiguriere den Workflow so, dass Testergebnisse und -abdeckungen an GitHub zurückgemeldet werden
-# Nutze GitHub-Checks und -Annotationen, um Einblick in die Testergebnisse für jeden Pull-Request zu erhalten.
-
+# Jest with Unit-Tests
+# use test coverage report
+# test results and coverage should be returned to GitHub
+# use GitHub-Checks & -Annotationen, for seeing test results for each pull request 
+# -> github will post an annotation to each pull request with a link to the testresults 
+ 
 name: Tests
 
 on:
-  push:
+  pull_request:
     branches:
       - workflow
 
@@ -28,11 +28,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
-
-      - name: Generate coverage report
-        run: npm run coverage
+      - name: Run tests and collect coverage
+        run: npm run test -- --coverage --ci
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
