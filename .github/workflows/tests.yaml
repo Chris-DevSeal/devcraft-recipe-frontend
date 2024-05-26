@@ -5,7 +5,6 @@
 # -> github will post an annotation to each pull request with a link to the testresults 
  
 name: Tests
-
 on:
   pull_request:
     branches:
