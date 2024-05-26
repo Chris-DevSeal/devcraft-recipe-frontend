@@ -1,0 +1,57 @@
+# erforderliche Dependencies müssen installiert werden, damit die testumgebung  unserer entwicklungsumgebung entspricht
+# Jest nutzen um Unit-Tests durchzuführen
+# geeignete Befehle, um Tests auszuführen und Test-Coverage-Reports zu erstellen.
+# Konfiguriere den Workflow so, dass Testergebnisse und -abdeckungen an GitHub zurückgemeldet werden
+# Nutze GitHub-Checks und -Annotationen, um Einblick in die Testergebnisse für jeden Pull-Request zu erhalten.
+
+name: Tests
+
+on:
+  push:
+    branches:
+      - workflow
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage
+
+  report:
+    name: Test coverage report
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download coverage report
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-report
+
+      - name: Publish coverage report
+        uses: actions/upload-sarif@v1
+        with:
+          sarif_file: coverage/lcov-report/sarif.json
