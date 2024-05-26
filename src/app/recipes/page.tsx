@@ -27,7 +27,7 @@ export default function Recipes() {
       .then((response) => response.json())
       .then((data) => setRecipes(data));
   };
-  let saveData = (data) => {
+  let saveData = (data: { name: string; ingredients: { name: string; amount: number; units: string; }[]; steps: string[]; }) => {
     // Uncomment this to activate API access:
     // fetch(`${api}/recipes`, {
     //   method: "POST",
@@ -47,16 +47,16 @@ export default function Recipes() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className={`mb-3 text-2xl font-semibold`}>Look at these recipes!</h1>
       <RecipeForm onSubmit={saveData} />
-      <ul class="list-disc list-inside">
+      <ul className="list-disc list-inside">
         {recipes.map((recipe, index) => {
           return (
             <li key={index}>
-              <span class="bold">{recipe.name}</span>
-              <ul class="list-disc list-inside pl-4">
+              <span className="bold">{recipe.name}</span>
+              <ul className="list-disc list-inside pl-4">
                 {recipe.ingredients.map((ingredient, ingredientIndex) => {
                   return (
                     <li key={ingredientIndex}>
-                      <span class="font-bold">{ingredient.name}</span>:{" "}
+                      <span className="font-bold">{ingredient.name}</span>:{" "}
                       {ingredient.amount} {ingredient.units}
                     </li>
                   );
