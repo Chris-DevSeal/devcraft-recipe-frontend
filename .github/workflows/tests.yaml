@@ -6,9 +6,15 @@
  
 name: Tests
 on:
-  pull_request:
-    branches:
-      - workflow
+    push:
+        branches:
+        - workflow
+
+    pull_request:
+        branches:
+        - workflow
+
+
 
 jobs:
   test:
