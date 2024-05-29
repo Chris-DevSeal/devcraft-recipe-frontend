@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function ErrorPage() {
   const searchParams = useSearchParams();
-  const error = searchParams.get('error');
+  const error = searchParams ? searchParams.get('error') : null;
 
   let errorMessage;
   switch (error) {
