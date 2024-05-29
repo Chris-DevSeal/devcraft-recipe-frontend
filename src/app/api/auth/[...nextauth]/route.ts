@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string, // refer to: https://medium.com/@rezahedi/using-nextauth-authentication-provider-in-next-js-by-app-router-f50cb23282c9
   pages: {
     signIn: "/api/auth/custom-signin",
-   /*  error: "/api/auth/custom-error" */
+    error: "/api/auth/custom-error",
   },
 };
 
