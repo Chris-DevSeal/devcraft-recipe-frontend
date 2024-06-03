@@ -1,33 +1,28 @@
 "use client";
 import RecipeForm from "@/components/RecipeForm";
 import { api } from "@/utils/api";
+import { Recipe } from "@prisma/client";
+import { pages } from "next/dist/build/templates/app-page";
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Recipes() {
-  const [recipes, setRecipes] = useState([
-    {
-      name: "Banana Bread",
-      ingredients: [{ name: "Bananas", amount: 6, units: "individual" }],
-      steps: ["Smush bananas", "2. Eat bread"],
-    },
-    {
-      name: "Banana Bread",
-      ingredients: [{ name: "Bananas", amount: 6, units: "individual" }],
-      steps: ["Smush bananas", "2. Eat bread"],
-    },
-    {
-      name: "Banana Bread",
-      ingredients: [{ name: "Bananas", amount: 6, units: "individual" }],
-      steps: ["Smush bananas", "2. Eat bread"],
-    },
-  ]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const searchParams = useSearchParams();
   const loadData = () => {
-    fetch(`${api}/recipes`)
+    const page = searchParams.get("page") || "1";
+    const pageSize = searchParams.get("page-size") || "10";
+
+    fetch(`${api}/recipes?page=${page}&page-size=${pageSize}`)
       .then((response) => response.json())
       .then((data) => setRecipes(data));
   };
-  let saveData = (data: { name: string; ingredients: { name: string; amount: number; units: string; }[]; steps: string[]; }) => {
+  let saveData = (data: {
+    name: string;
+    ingredients: { name: string; amount: number; units: string }[];
+    steps: string[];
+  }) => {
     // Uncomment this to activate API access:
     // fetch(`${api}/recipes`, {
     //   method: "POST",
@@ -40,31 +35,33 @@ export default function Recipes() {
 
   // Uncomment this to activate API access:
   // load data on start
-  // useEffect(() => {
-  //   loadData();
-  // }, []);
+  useEffect(() => {
+    loadData();
+  }, []);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className={`mb-3 text-2xl font-semibold`}>Look at these recipes!</h1>
       <RecipeForm onSubmit={saveData} />
       <ul className="list-disc list-inside">
-        {recipes.map((recipe, index) => {
-          return (
-            <li key={index}>
-              <span className="bold">{recipe.name}</span>
-              <ul className="list-disc list-inside pl-4">
-                {recipe.ingredients.map((ingredient, ingredientIndex) => {
-                  return (
-                    <li key={ingredientIndex}>
-                      <span className="font-bold">{ingredient.name}</span>:{" "}
-                      {ingredient.amount} {ingredient.units}
-                    </li>
-                  );
-                })}
-              </ul>
-            </li>
-          );
-        })}
+        {recipes &&
+          recipes.map((recipe, index) => {
+            return (
+              <li key={index}>
+                <span className="bold">{recipe.name}</span>
+                <ul className="list-disc list-inside pl-4">
+                  {recipe.ingredients &&
+                    recipe.ingredients.map((ingredient, ingredientIndex) => {
+                      return (
+                        <li key={ingredientIndex}>
+                          <span className="font-bold">{ingredient.name}</span>:{" "}
+                          {ingredient.amount} {ingredient.units}
+                        </li>
+                      );
+                    })}
+                </ul>
+              </li>
+            );
+          })}
       </ul>
     </main>
   );
