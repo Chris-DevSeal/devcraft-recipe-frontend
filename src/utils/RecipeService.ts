@@ -1,3 +1,4 @@
+import { Recipe } from "@prisma/client";
 import prismaClient from "./prisma";
 
 class RecipeService {
@@ -8,6 +9,15 @@ class RecipeService {
       take: pageSize,
     });
     return recipes;
+  }
+
+ async loadRecipeById(id: number): Promise<Recipe | null> {
+    const recipe = await prismaClient.recipe.findUnique({
+      where: { id: id },
+      include: { ingredients: true },
+    });
+
+    return recipe;
   }
 }
 
