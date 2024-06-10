@@ -1,28 +1,41 @@
-'use client';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+"use client";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Suspense } from "react";
 
 export default function ErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading....</div>}>
+      <CustomError />
+    </Suspense>
+  );
+}
+
+function CustomError() {
   const searchParams = useSearchParams();
-  const error = searchParams ? searchParams.get('error') : null;
+  const error = searchParams ? searchParams.get("error") : null;
 
   let errorMessage;
   switch (error) {
-    case 'OAuthAccountNotLinked':
-      errorMessage = 'Das Konto ist nicht mit einem OAuth-Provider verknüpft.';
+    case "OAuthAccountNotLinked":
+      errorMessage = "Das Konto ist nicht mit einem OAuth-Provider verknüpft.";
       break;
-    case 'EmailCreateAccount':
-      errorMessage = 'Fehler beim Erstellen des Kontos mit dieser E-Mail-Adresse.';
+    case "EmailCreateAccount":
+      errorMessage =
+        "Fehler beim Erstellen des Kontos mit dieser E-Mail-Adresse.";
       break;
     default:
-      errorMessage = 'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es erneut.';
+      errorMessage =
+        "Ein unbekannter Fehler ist aufgetreten. Bitte versuche es erneut.";
   }
-
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <h1 className="text-2xl mb-4">Anmeldefehler</h1>
       <p className="mb-4">{errorMessage}</p>
-      <Link href="/api/auth/custom-signin" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+      <Link
+        href="/api/auth/custom-signin"
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+      >
         Zurück zur Anmeldeseite
       </Link>
     </div>

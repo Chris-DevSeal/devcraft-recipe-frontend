@@ -4,16 +4,15 @@ import Page from "../src/app/page";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import ErrorPage from "@/app/api/auth/custom-error/page";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 // Erstelle eine Mock-Sitzung
 const mockSession: Session = {
   user: { email: "test@example.com", name: "TestUser", image: "" },
-  expires: "2024-12-31T23:59:59.999Z", 
-  
+  expires: "2024-12-31T23:59:59.999Z",
 };
 // Mock useSearchParams
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useSearchParams: jest.fn(),
 }));
 
@@ -55,15 +54,17 @@ describe("Page", () => {
     const signOutBtn = screen.getByText("Sign out");
     expect(signOutBtn).toBeInTheDocument();
   });
-  it('renders error message when session provider encounters an error of OAuthAccountNotLinked', () => {
+  it("renders error message when session provider encounters an error of OAuthAccountNotLinked", () => {
     // define errormessage in queryparams to be tested
     (useSearchParams as jest.Mock).mockReturnValue({
-      get: jest.fn().mockReturnValue('OAuthAccountNotLinked'),
+      get: jest.fn().mockReturnValue("OAuthAccountNotLinked"),
     });
 
     render(<ErrorPage />);
 
-    const errorMessage = screen.getByText('Das Konto ist nicht mit einem OAuth-Provider verknüpft.');
+    const errorMessage = screen.getByText(
+      "Das Konto ist nicht mit einem OAuth-Provider verknüpft."
+    );
     expect(errorMessage).toBeInTheDocument();
   });
 });

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { RecipeWithIngredients } from "@/utils/types";
+import { FormEvent, useState } from "react";
 
-export default function RecipeForm({ onSubmit }) {
+export default function RecipeForm({ onSubmit }: {onSubmit: (data: RecipeWithIngredients) => void}) {
   const [ingredientAmount, setIngredientAmount] = useState(1);
-  const submitRecipe = (event) => {
+  const submitRecipe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
     console.log(Object.fromEntries(formData));
     onSubmit({
       name: formData.get("name"),
@@ -18,19 +19,20 @@ export default function RecipeForm({ onSubmit }) {
         };
       }),
     });
-    event.target.reset();
+    event.currentTarget.reset()
   };
   return (
     <form onSubmit={submitRecipe}>
       <div className="flex gap-4 justify-center items-center mb-6">
         <label htmlFor="name">Name:</label>
-        <input id="name" name="name" placeholder="Banana Bread"></input>
+        <input id="name" name="name" placeholder="Banana Bread" required></input>
       </div>
       <div className="flex gap-4 justify-center items-center mb-6">
         <label htmlFor="steps">Steps:</label>
         <textarea
           id="steps"
           name="steps"
+          required
           placeholder="1. Eat banana bread"
         ></textarea>
       </div>
