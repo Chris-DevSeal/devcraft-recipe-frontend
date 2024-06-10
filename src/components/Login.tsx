@@ -7,7 +7,7 @@ export default function Login() {
     return (
       <div className="flex gap-5 flex-col justify-center align-middle">
         <Image
-          src={session.user?.image}
+          src={session.user?.image || ''}
           width={80}
           height={40}
           className="rounded-full mx-auto"

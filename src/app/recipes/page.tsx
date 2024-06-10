@@ -1,28 +1,29 @@
 "use client";
 import RecipeForm from "@/components/RecipeForm";
 import { api } from "@/utils/api";
+import prismaClient from "@/utils/prisma";
+import { RecipeWithIngredients } from "@/utils/types";
 import { Recipe } from "@prisma/client";
+
 import { pages } from "next/dist/build/templates/app-page";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function Recipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+export default function RecipePage() {
+  return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Recipes />
+      </Suspense>
+
+  );
+}
+
+function Recipes() {
+  const [recipes, setRecipes] = useState<RecipeWithIngredients[]>([]);
   const searchParams = useSearchParams();
-  const loadData = () => {
-    const page = searchParams.get("page") || "1";
-    const pageSize = searchParams.get("page-size") || "10";
 
-    fetch(`${api}/recipes?page=${page}&page-size=${pageSize}`)
-      .then((response) => response.json())
-      .then((data) => setRecipes(data));
-  };
-  let saveData = (data: {
-    name: string;
-    ingredients: { name: string; amount: number; units: string }[];
-    steps: string[];
-  }) => {
+  let saveData = (data: RecipeWithIngredients) => {
     // Uncomment this to activate API access:
     // fetch(`${api}/recipes`, {
     //   method: "POST",
@@ -36,9 +37,17 @@ export default function Recipes() {
   // Uncomment this to activate API access:
   // load data on start
   useEffect(() => {
+    const loadData = () => {
+      const page = searchParams.get("page") || "1";
+      const pageSize = searchParams.get("page-size") || "10";
+
+      fetch(`${api}/recipes?page=${page}&page-size=${pageSize}`)
+        .then((response) => response.json())
+        .then((data) => setRecipes(data));
+    };
     loadData();
   }, []);
-  return (
+return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className={`mb-3 text-2xl font-semibold`}>Look at these recipes!</h1>
       <RecipeForm onSubmit={saveData} />
@@ -64,5 +73,6 @@ export default function Recipes() {
           })}
       </ul>
     </main>
-  );
+
+)
 }

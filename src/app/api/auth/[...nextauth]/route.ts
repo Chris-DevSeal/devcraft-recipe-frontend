@@ -4,7 +4,7 @@ import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github";
 import { signIn } from "next-auth/react";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
