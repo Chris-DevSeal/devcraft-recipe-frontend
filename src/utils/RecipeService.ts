@@ -11,15 +11,6 @@ class RecipeService {
     return recipes;
   }
 
-  async loadRecipeById(id: number): Promise<Recipe | null> {
-    const recipe = await prismaClient.recipe.findUnique({
-      where: { id: id },
-      include: { ingredients: true },
-    });
-
-    return recipe;
-  }
-
   async createRecipe(
     name: string,
     steps: string,
