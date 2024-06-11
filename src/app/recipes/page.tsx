@@ -23,7 +23,7 @@ function Recipes() {
   const [recipes, setRecipes] = useState<RecipeWithIngredients[]>([]);
   const searchParams = useSearchParams();
 
-  let saveData = (data: RecipeWithIngredients) => {
+  const saveData = (data: RecipeWithIngredients) => {
     // Uncomment this to activate API access:
     // fetch(`${api}/recipes`, {
     //   method: "POST",
