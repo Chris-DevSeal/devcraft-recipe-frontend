@@ -44,6 +44,13 @@ class RecipeService {
       throw error;
     }
   }
+
+  async deleteRecipeById(id: number) {
+    return await prismaClient.recipe.delete({
+      where: { id: id },
+      include: { ingredients: true },
+    });
+  }
 }
 
 const recipeService = new RecipeService();
