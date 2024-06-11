@@ -22,6 +22,6 @@ model Ingredient {
   name String 
   units String
   amount Int
-  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipe Recipe @relation(onDelete: Cascade, fields: [recipeId], references: [id])
   recipeId Int
 }
