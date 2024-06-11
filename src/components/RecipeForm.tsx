@@ -8,8 +8,8 @@ export default function RecipeForm({ onSubmit }: {onSubmit: (data: RecipeWithIng
     const formData = new FormData(event.currentTarget);
     console.log(Object.fromEntries(formData));
     onSubmit({
-      name: formData.get("name"),
-      steps: formData.get("steps"),
+      name: formData.get("name")!.toString(),
+      steps: formData.get("steps")!.toString(),
       // @ts-ignore
       ingredients: [...Array(ingredientAmount).keys()].map((index) => {
         return {
