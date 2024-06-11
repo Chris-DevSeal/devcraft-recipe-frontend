@@ -8,14 +8,13 @@ import { Recipe } from "@prisma/client";
 import { pages } from "next/dist/build/templates/app-page";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 export default function RecipePage() {
   return (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Recipes />
-      </Suspense>
-
+    <Suspense fallback={<div>Loading...</div>}>
+      <Recipes />
+    </Suspense>
   );
 }
 
@@ -23,31 +22,42 @@ function Recipes() {
   const [recipes, setRecipes] = useState<RecipeWithIngredients[]>([]);
   const searchParams = useSearchParams();
 
-  const saveData = (data: RecipeWithIngredients) => {
+  const loadData = useCallback(() => {
+    const page = searchParams.get("page") || "1";
+    const pageSize = searchParams.get("page-size") || "10";
+
+    fetch(`${api}/recipes?page=${page}&page-size=${pageSize}`)
+      .then((response) => response.json())
+      .then((data) => setRecipes(data));
+  }, [searchParams]);
+  const saveData = async (data: RecipeWithIngredients) => {
     // Uncomment this to activate API access:
-    // fetch(`${api}/recipes`, {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    // }).then((response) => loadData());
+    const res = await fetch(`${api}/recipes`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    if (res.status !== 201) {
+      return;
+    }
+    const newRecipe = (await res.json()) as RecipeWithIngredients;
 
     // Comment the following line to enable API access
-    setRecipes((currentRecipes) => [...currentRecipes, data]);
+    setRecipes((currentRecipes) => [...currentRecipes, newRecipe]);
   };
 
+  const deleteRecipe = async (id: number) => {
+    const res = await fetch(`${api}/recipes/${id}`, { method: "Delete" });
+    if (res.status !== 200) {
+      throw Error(`Couldnt delete recipe ${id}`);
+    }
+    loadData();
+  };
   // Uncomment this to activate API access:
   // load data on start
   useEffect(() => {
-    const loadData = () => {
-      const page = searchParams.get("page") || "1";
-      const pageSize = searchParams.get("page-size") || "10";
-
-      fetch(`${api}/recipes?page=${page}&page-size=${pageSize}`)
-        .then((response) => response.json())
-        .then((data) => setRecipes(data));
-    };
     loadData();
-  }, []);
-return (
+  }, [loadData]);
+  return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className={`mb-3 text-2xl font-semibold`}>Look at these recipes!</h1>
       <RecipeForm onSubmit={saveData} />
@@ -68,11 +78,11 @@ return (
                       );
                     })}
                 </ul>
+                <button onClick={() => deleteRecipe(recipe.id)}>Delete</button>
               </li>
             );
           })}
       </ul>
     </main>
-
-)
+  );
 }

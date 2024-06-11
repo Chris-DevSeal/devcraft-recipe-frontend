@@ -3,6 +3,11 @@
 # VS Code config
 .vscode/
 
+# SQLite DB
+*.db
+*.sqlite
+*.sqlite3
+
 # dependencies
 /node_modules
 /.pnp

@@ -1,5 +1,6 @@
-import { Recipe } from "@prisma/client";
+import { Ingredient, Recipe } from "@prisma/client";
 import prismaClient from "./prisma";
+import { RecipeWithIngredients } from "./types";
 
 class RecipeService {
   async loadRecipes(page: number = 1, pageSize: number = 10) {
@@ -11,10 +12,18 @@ class RecipeService {
     return recipes;
   }
 
+  async loadRecipeById(id: number): Promise<RecipeWithIngredients | null> {
+    const recipe = await prismaClient.recipe.findFirst({
+      where: { id: id },
+      include: { ingredients: true },
+    });
+    return recipe;
+  }
+
   async createRecipe(
     name: string,
     steps: string,
-    ingredients: { name: string; units: string; amount: number }[]
+    ingredients: Ingredient[]
   ): Promise<Recipe> {
     try {
       const newRecipe = await prismaClient.recipe.create({
@@ -34,6 +43,13 @@ class RecipeService {
       console.error("Error in createRecipe:", error); // Debugging
       throw error;
     }
+  }
+
+  async deleteRecipeById(id: number) {
+    return await prismaClient.recipe.delete({
+      where: { id: id },
+      include: { ingredients: true },
+    });
   }
 }
 
